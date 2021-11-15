@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./FeedbackOptions.css";
 
-function Feedback({ onClickNeutral }) {
+function Feedback({ onClick }) {
   return (
     <>
       <div className="button__area">
@@ -10,7 +10,7 @@ function Feedback({ onClickNeutral }) {
             <button
               className="button__btn good"
               id="good_value"
-              onClick={onClickNeutral}
+              onClick={onClick}
             >
               Good
             </button>
@@ -19,7 +19,7 @@ function Feedback({ onClickNeutral }) {
             <button
               className="button__btn neutral"
               id="neutral_value"
-              onClick={onClickNeutral}
+              onClick={onClick}
             >
               Neutral
             </button>
@@ -28,7 +28,7 @@ function Feedback({ onClickNeutral }) {
             <button
               className="button__btn bad"
               id="bad_value"
-              onClick={onClickNeutral}
+              onClick={onClick}
             >
               Bad
             </button>

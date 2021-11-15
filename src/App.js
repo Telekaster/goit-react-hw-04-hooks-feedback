@@ -1,67 +1,64 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import Section from "./components/Section/Section";
 import FeedbackOptions from "./components/FeedbackOptions/FeedbackOptions";
 import Statistics from "./components/Statistics/Statistics";
 import Notification from "./components/Notification/Notification";
 
-class App extends Component {
-  state = {
-    good_value: 0,
-    neutral_value: 0,
-    bad_value: 0,
-  };
+export default function App() {
+  const [good_value, setGood] = useState(0);
+  const [neutral_value, setNeutral] = useState(0);
+  const [bad_value, setBad] = useState(0);
 
-  handleClickNeutral = (evt) => {
+  function handleClick(evt) {
     const key = evt.target.id;
 
-    this.setState((prevState) => {
-      return { [key]: prevState[key] + 1 };
-    });
-  };
+    switch (key) {
+      case "good_value":
+        setGood(good_value + 1);
+        break;
 
-  countTotalFeedback = () => {
-    return (
-      this.state.good_value + this.state.neutral_value + this.state.bad_value
-    );
-  };
+      case "neutral_value":
+        setNeutral(neutral_value + 1);
+        break;
 
-  countPositiveFeedbackPercentage() {
-    return Math.round(
-      (this.state.good_value / this.countTotalFeedback()) * 100
-    );
+      case "bad_value":
+        setBad(bad_value + 1);
+        break;
+
+      default:
+        break;
+    }
   }
 
-  render() {
-    return (
-      <>
+  function countTotalFeedback() {
+    return good_value + neutral_value + bad_value;
+  }
+  function countPositiveFeedbackPercentage() {
+    return Math.round((good_value / countTotalFeedback()) * 100);
+  }
+
+  return (
+    <>
+      <Section
+        title="Please leave feedback"
+        children={<FeedbackOptions onClick={handleClick} />}
+      />
+      {!good_value && !neutral_value && !bad_value ? (
+        <Section title="Statistics" children={<Notification />} />
+      ) : (
         <Section
-          title="Please leave feedback"
+          title="Statistics"
           children={
-            <FeedbackOptions onClickNeutral={this.handleClickNeutral} />
+            <Statistics
+              good_value={good_value}
+              neutral_value={neutral_value}
+              bad_value={bad_value}
+              total={countTotalFeedback()}
+              positivePercentage={countPositiveFeedbackPercentage()}
+            />
           }
         />
-
-        {this.state.good_value === 0 &&
-        this.state.neutral_value === 0 &&
-        this.state.bad_value === 0 ? (
-          <Section title="Statistics" children={<Notification />} />
-        ) : (
-          <Section
-            title="Statistics"
-            children={
-              <Statistics
-                good_value={this.state.good_value}
-                neutral_value={this.state.neutral_value}
-                bad_value={this.state.bad_value}
-                total={this.countTotalFeedback()}
-                positivePercentage={this.countPositiveFeedbackPercentage()}
-              />
-            }
-          />
-        )}
-      </>
-    );
-  }
+      )}
+    </>
+  );
 }
-
-export default App;
